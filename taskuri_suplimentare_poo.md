@@ -1,1 +1,2 @@
 # activitate_seminar_poo_grupa1159_ID
+#define _CRT_SECURE_NO_WARNINGS
