@@ -1,4 +1,7 @@
 //cat rescue app
+//se acopera concepte de poo cum ar fi: definirea claselor, constructorul fara parametrii, constructorul cu parametrii, constructorul de copiere, destructorul, operatorul =, getteri si setteri
+//am acoperit si 3 metode: feed, play, status, care modifica hunger si mood si afiseaza un rezumat al starii pisicii
+
 
 #define _CRT_SECURE_NO_WARNINGS
 
@@ -7,8 +10,8 @@
 #include <cstring>
 using namespace std;
 
-class Cat{
-  private:
+class Cat{ //am creat o clasa, care modeleaza pisica dupa nume, rasa, varsta, mood, si hunger
+  private: 
     char* name;
     char* breed;
     int age;
@@ -29,7 +32,7 @@ class Cat{
     }
 
     // constructor cu parametrii
-    Cat(char* name, char* breed, int age, bool rescued, int mood, int hunger){
+    Cat( const char* name, const char* breed, int age, bool rescued, int mood, int hunger){
      if (name != nullptr){
        this->name = new char[strlen(name) + 1];
        strcpy_s(this->name, strlen(name) + 1, name);
@@ -113,7 +116,72 @@ class Cat{
     } 
 
     //setteri
+     //setter pentru atributul mood (0 pentru trist, 10 pentru foarte fericit)
+     //cu aceasta metoda ne asiguram ca valoarea introdusa este in intervalul [0,10]
+    void setMood (int mood){
+      if(mood<0){ //nu permitem utilizatorului sa introduca valori negative
+        this->mood = 0;
+      }else if(mood>10){ //nu permitem utilizatorului sa introduca valori mai mari decat 10, daca face acest lucru, valoarea se va reseta la 10
+        this->mood = 10;
+      } else{
+        this->mood = mood; // daca se introduce o valoare intre 0 si 10 o acceptam, este valida
+      }
+    }
+
+    // setter pentru atributul hunger (0, pisica foarte flamand, 10 pentru satul)
+    void setHunger(int hunger){
+      if(hunger<0){ //nu permitem utilizatorului sa introduca valori negative, daca face acest lucru, hunger se va reseta la 0
+        this->hunger = 0;
+      }else if(hunger>10){ //nu pemitem utilizatorului sa introduca valori mai mari decat 10, daca face acest lucru valoarea se reseteaza la 10
+        this->hunger = 10;
+      }else{
+        this->hunger = hunger; //orice valoare in intervalul 0-10 este acceptata
+      }
+    }
+
+    void setRescued(bool rescued){
+      this->rescued = rescued; //permite actualizarea statusului pisicii, daca aceasta este salvata sau nu
+    }
+
     //operatorul =
+
+    Cat& operator=(const Cat& c){
+
+      if (this == &c){
+        return *this;
+      }
+
+      if( this-> name != nullptr){
+        delete[] this->name;
+      }
+
+      if(this->breed != nullptr){
+        delete[] this->breed;
+      }
+
+      if(c.name != nullptr){
+        this->name = new char[strlen(c.name) + 1];
+        strcpy_s(this->name, strlen(c.name) + 1, c.name);
+      }else{
+        this->name = nullptr;
+      } 
+
+
+      if (c.breed !=nullptr){
+        this->breed = new char[strlen(c.breed) + 1];
+        strcpy_s(this->breed, strlen(c.breed) + 1, c.breed);
+      } else {
+        this->breed = nullptr;
+      }
+
+      this->age = c.age;
+      this->rescued = c.rescued;
+      this->mood = c.mood;
+      this->hunger = c.hunger;
+
+      return *this;
+    }
+    
 
     //cu aceasta functie putem hrani una din pisicile noastre, una din metode
     void feed(){ 
@@ -151,9 +219,10 @@ class Cat{
     }
 
     //functia status, aflam in ce stare se afla pisica noastra
+  
 
     void status () {
-      cout << "-------Cat Satus--------" << endl;
+      cout << "-------Cat Status--------" << endl;
       cout << "Name:" << this->name << endl;
       cout << "Breed:" << this->breed << endl;
       cout << "Age:" << this->age << endl;
@@ -163,7 +232,7 @@ class Cat{
         cout << "Rescued: NO" << endl;
       }
       cout << "Mood: " << this->mood << endl;
-      cout << "Hunger" << this->hunger << endl;
+      cout << "Hunger :" << this->hunger << endl;
     }
 };
 
@@ -176,7 +245,7 @@ int main(){
 
   int option;
   do{
-  cout << " Welcoe to the pet rescue app. To continue please choose one of the following options: \n\n ";
+  cout << " Welcome to the pet rescue app. To continue please choose one of the following options: \n\n ";
   cout << "1) View pets" << endl;
   cout << "2) Feed a pet" << endl;
   cout << "3) Play with a pet" << endl;
@@ -185,7 +254,6 @@ int main(){
 
   cout << "The option you are choosing is: ";
   cin >> option;
-   while (option != 0);
 
   switch (option){
     case 1:
