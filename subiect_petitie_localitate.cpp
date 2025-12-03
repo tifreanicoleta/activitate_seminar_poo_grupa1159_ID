@@ -113,4 +113,15 @@ class Petitie{
     return *this;
    }
 
+   //operatorul ! - pentru teste logice
+
+   bool operator!() const{
+    if (status == false && zileDeLaDepunere > termen_legal){
+      return true;
+    }
+    else{
+      return false;
+    }
+   }
+
 };
