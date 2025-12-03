@@ -27,8 +27,10 @@ class Petitie{
     string categorie;
     char *descriere;
     bool status;
+    int zileDeLaDepunere;
 
     static int nrPetitii;
+    static const int termen_legal = 30;
 
   public: 
 
@@ -39,24 +41,26 @@ class Petitie{
     this->numePrenume = "";
     this->categorie = "";
     this->descriere = nullptr;
-    this->status = true;
-    Petitie::nrPetitii += 1;
+    this->status = false;
+    this->zileDeLaDepunere = 0;
   }
 
   //constructorul cu parametrii
 
-   Petitie(string dataDepunerii, string numePrenume, string categorie, const char* descriere, bool status){
+   Petitie(string dataDepunerii, string numePrenume, string categorie, const char* descriere, bool status, int zileDeLaDepunere){
      this->dataDepunerii = dataDepunerii;
      this->numePrenume = numePrenume;
      this->categorie = categorie;
      
-     if (this->descriere != nullptr){
+     if (descriere != nullptr){
        this->descriere = new char[strlen (descriere) + 1];
        strcpy_s(this->descriere, strlen(descriere) + 1, descriere);
+     }else {
+       this->descriere = nullptr;
      }
 
      this->status = status;
-     Petitie::nrPetitii += 1;
+     this->zileDeLaDepunere = zileDeLaDepunere;
    }
 
    //constructorul de copiere
@@ -72,8 +76,7 @@ class Petitie{
        this->descriere = nullptr;
      }
      status = p.status;
-
-     Petitie::nrPetitii += 1;
+     zileDeLaDepunere = p.zileDeLaDepunere;
    }
 
    //destructorul
@@ -99,6 +102,7 @@ class Petitie{
     this->numePrenume = p.numePrenume;
     this->categorie = p.categorie;
     this->status = p.status;
+    this->zileDeLaDepunere = p.zileDeLaDepunere;
     //deep copy pentru descriere
     if(p.descriere != nullptr){
       this->descriere = new char[strlen(p.descriere) + 1];
